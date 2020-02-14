@@ -194,18 +194,14 @@ func (c *Client) Stat(path string) (os.FileInfo, error) {
 			f.path = path
 			f.etag = p.ETag
 			f.contentType = p.ContentType
+			f.size = parseInt64(&p.Size)
+			f.modified = parseModified(&p.Modified)
 
 			if p.Type.Local == "collection" {
 				if !strings.HasSuffix(f.path, "/") {
 					f.path += "/"
 				}
-				f.size = 0
-				f.modified = time.Unix(0, 0)
 				f.isdir = true
-			} else {
-				f.size = parseInt64(&p.Size)
-				f.modified = parseModified(&p.Modified)
-				f.isdir = false
 			}
 		}
 
